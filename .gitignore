@@ -10,7 +10,7 @@ dist/
 .github/copilot/
 .vscode/commands/
 docs/ai/
-AGENTS.md
-CLAUDE.md
-GITHUB_COPILOT.md
-VSCODE_AI.md
+/AGENTS.md
+/CLAUDE.md
+/GITHUB_COPILOT.md
+/VSCODE_AI.md
