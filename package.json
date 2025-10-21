@@ -18,7 +18,10 @@
     "cli",
     "templates",
     "cursor",
-    "claude"
+    "claude",
+    "copilot",
+    "github-copilot",
+    "vscode"
   ],
   "author": "",
   "license": "MIT",

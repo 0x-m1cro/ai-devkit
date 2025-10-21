@@ -7,7 +7,7 @@ export type Phase =
   | 'deployment'
   | 'monitoring';
 
-export type Environment = 'cursor' | 'claude' | 'both';
+export type Environment = 'cursor' | 'claude' | 'copilot' | 'vscode' | 'both' | 'all';
 
 export interface DevKitConfig {
   version: string;

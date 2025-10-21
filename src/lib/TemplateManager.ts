@@ -25,14 +25,24 @@ export class TemplateManager {
   async copyEnvironmentTemplates(environment: Environment): Promise<string[]> {
     const copiedFiles: string[] = [];
 
-    if (environment === 'cursor' || environment === 'both') {
+    if (environment === 'cursor' || environment === 'both' || environment === 'all') {
       const cursorFiles = await this.copyCursorTemplates();
       copiedFiles.push(...cursorFiles);
     }
 
-    if (environment === 'claude' || environment === 'both') {
+    if (environment === 'claude' || environment === 'both' || environment === 'all') {
       const claudeFiles = await this.copyClaudeTemplates();
       copiedFiles.push(...claudeFiles);
+    }
+
+    if (environment === 'copilot' || environment === 'all') {
+      const copilotFiles = await this.copyCopilotTemplates();
+      copiedFiles.push(...copilotFiles);
+    }
+
+    if (environment === 'vscode' || environment === 'all') {
+      const vscodeFiles = await this.copyVSCodeTemplates();
+      copiedFiles.push(...vscodeFiles);
     }
 
     return copiedFiles;
@@ -52,7 +62,7 @@ export class TemplateManager {
     await fs.copy(rulesSourceDir, rulesTargetDir);
     
     const ruleFiles = await fs.readdir(rulesSourceDir);
-    ruleFiles.forEach(file => {
+    ruleFiles.forEach((file: string) => {
       files.push(path.join(rulesTargetDir, file));
     });
 
@@ -62,7 +72,7 @@ export class TemplateManager {
     await fs.copy(commandsSourceDir, commandsTargetDir);
     
     const commandFiles = await fs.readdir(commandsSourceDir);
-    commandFiles.forEach(file => {
+    commandFiles.forEach((file: string) => {
       files.push(path.join(commandsTargetDir, file));
     });
 
@@ -83,7 +93,49 @@ export class TemplateManager {
     await fs.copy(commandsSourceDir, commandsTargetDir);
     
     const commandFiles = await fs.readdir(commandsSourceDir);
-    commandFiles.forEach(file => {
+    commandFiles.forEach((file: string) => {
+      files.push(path.join(commandsTargetDir, file));
+    });
+
+    return files;
+  }
+
+  private async copyCopilotTemplates(): Promise<string[]> {
+    const files: string[] = [];
+
+    const workspaceSource = path.join(this.templatesDir, 'env', 'copilot', 'GITHUB_COPILOT.md');
+    const workspaceTarget = path.join(this.targetDir, 'GITHUB_COPILOT.md');
+    await fs.copy(workspaceSource, workspaceTarget);
+    files.push(workspaceTarget);
+
+    const commandsSourceDir = path.join(this.templatesDir, 'commands');
+    const commandsTargetDir = path.join(this.targetDir, '.github', 'copilot', 'commands');
+    await fs.ensureDir(commandsTargetDir);
+    await fs.copy(commandsSourceDir, commandsTargetDir);
+    
+    const commandFiles = await fs.readdir(commandsSourceDir);
+    commandFiles.forEach((file: string) => {
+      files.push(path.join(commandsTargetDir, file));
+    });
+
+    return files;
+  }
+
+  private async copyVSCodeTemplates(): Promise<string[]> {
+    const files: string[] = [];
+
+    const workspaceSource = path.join(this.templatesDir, 'env', 'vscode', 'VSCODE_AI.md');
+    const workspaceTarget = path.join(this.targetDir, 'VSCODE_AI.md');
+    await fs.copy(workspaceSource, workspaceTarget);
+    files.push(workspaceTarget);
+
+    const commandsSourceDir = path.join(this.templatesDir, 'commands');
+    const commandsTargetDir = path.join(this.targetDir, '.vscode', 'commands');
+    await fs.ensureDir(commandsTargetDir);
+    await fs.copy(commandsSourceDir, commandsTargetDir);
+    
+    const commandFiles = await fs.readdir(commandsSourceDir);
+    commandFiles.forEach((file: string) => {
       files.push(path.join(commandsTargetDir, file));
     });
 
@@ -96,14 +148,24 @@ export class TemplateManager {
   }
 
   async environmentFilesExist(environment: Environment): Promise<boolean> {
-    if (environment === 'cursor' || environment === 'both') {
+    if (environment === 'cursor' || environment === 'both' || environment === 'all') {
       const rulesExists = await fs.pathExists(path.join(this.targetDir, '.cursor', 'rules'));
       if (rulesExists) return true;
     }
 
-    if (environment === 'claude' || environment === 'both') {
+    if (environment === 'claude' || environment === 'both' || environment === 'all') {
       const workspaceExists = await fs.pathExists(path.join(this.targetDir, '.claude', 'CLAUDE.md'));
       if (workspaceExists) return true;
+    }
+
+    if (environment === 'copilot' || environment === 'all') {
+      const copilotExists = await fs.pathExists(path.join(this.targetDir, '.github', 'copilot', 'commands'));
+      if (copilotExists) return true;
+    }
+
+    if (environment === 'vscode' || environment === 'all') {
+      const vscodeExists = await fs.pathExists(path.join(this.targetDir, '.vscode', 'commands'));
+      if (vscodeExists) return true;
     }
 
     return false;

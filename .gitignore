@@ -7,5 +7,10 @@ dist/
 .ai-devkit.json
 .cursor/
 .claude/
+.github/copilot/
+.vscode/commands/
 docs/ai/
 AGENTS.md
+CLAUDE.md
+GITHUB_COPILOT.md
+VSCODE_AI.md

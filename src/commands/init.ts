@@ -77,7 +77,10 @@ export async function initCommand(options: InitOptions) {
         choices: [
           { name: 'Cursor', value: 'cursor' },
           { name: 'Claude Code', value: 'claude' },
-          { name: 'Both', value: 'both' }
+          { name: 'GitHub Copilot', value: 'copilot' },
+          { name: 'VSCode (generic AI support)', value: 'vscode' },
+          { name: 'Both Cursor and Claude', value: 'both' },
+          { name: 'All environments', value: 'all' }
         ]
       }
     ]);
@@ -159,7 +162,7 @@ export async function initCommand(options: InitOptions) {
     }
 
     if (shouldCopy) {
-      const file = await templateManager.copyPhaseTemplate(phase);
+      await templateManager.copyPhaseTemplate(phase);
       await configManager.addPhase(phase);
       console.log(chalk.green(`✓ Created ${phase} phase`));
     } else {
