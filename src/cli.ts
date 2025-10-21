@@ -14,7 +14,7 @@ program
 program
   .command('init')
   .description('Initialize AI DevKit in the current directory')
-  .option('-e, --environment <env>', 'Development environment (cursor|claude|both)')
+  .option('-e, --environment <env>', 'Development environment (cursor|claude|copilot|vscode|both|all)')
   .option('-a, --all', 'Initialize all phases')
   .option('-p, --phases <phases>', 'Comma-separated list of phases to initialize')
   .action(initCommand);

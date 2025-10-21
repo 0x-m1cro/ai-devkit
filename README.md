@@ -1,6 +1,6 @@
 # AI DevKit
 
-A CLI toolkit for AI-assisted software development with structured phase templates and environment setup for Cursor and Claude Code.
+A CLI toolkit for AI-assisted software development with structured phase templates and environment setup for Cursor, Claude Code, GitHub Copilot, and VSCode.
 
 [![npm version](https://img.shields.io/npm/v/ai-devkit.svg)](https://www.npmjs.com/package/ai-devkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -8,7 +8,7 @@ A CLI toolkit for AI-assisted software development with structured phase templat
 ## Features
 
 - 🎯 **Phase-based Development**: Structured templates for each stage of the software development lifecycle
-- 🤖 **AI Environment Setup**: Automatic configuration for Cursor and Claude Code
+- 🤖 **AI Environment Setup**: Automatic configuration for Cursor, Claude Code, GitHub Copilot, and VSCode
 - 📝 **Customizable Templates**: Markdown-based templates with YAML frontmatter
 - 🚀 **Interactive CLI**: User-friendly prompts with flag override support
 - ⚙️ **State Management**: Tracks initialized phases and configuration
@@ -40,7 +40,7 @@ ai-devkit init --phases requirements,design,planning
 
 This will:
 1. Create a `.ai-devkit.json` configuration file
-2. Set up your AI development environment (Cursor/Claude Code)
+2. Set up your AI development environment (Cursor/Claude Code/GitHub Copilot/VSCode)
 3. Generate phase templates in `docs/ai/`
 
 ## Available Phases
@@ -60,7 +60,7 @@ This will:
 Initialize AI DevKit in your project.
 
 **Options:**
-- `-e, --environment <env>`: Specify environment (cursor|claude|both)
+- `-e, --environment <env>`: Specify environment (cursor|claude|copilot|vscode|both|all)
 - `-a, --all`: Initialize all phases at once
 - `-p, --phases <phases>`: Comma-separated list of specific phases
 
@@ -71,6 +71,12 @@ ai-devkit init
 
 # Initialize for Cursor with all phases
 ai-devkit init --environment cursor --all
+
+# Initialize for GitHub Copilot
+ai-devkit init --environment copilot --all
+
+# Initialize for all environments
+ai-devkit init --environment all --all
 
 # Initialize specific phases
 ai-devkit init --phases requirements,design,implementation
@@ -149,6 +155,39 @@ your-project/
         └── capture-knowledge.md
 ```
 
+### For GitHub Copilot:
+```
+└── .github/
+    └── copilot/
+        └── commands/         # Custom command templates (Markdown files)
+            ├── new-requirement.md
+            ├── code-review.md
+            ├── execute-plan.md
+            ├── writing-test.md
+            ├── update-planning.md
+            ├── check-implementation.md
+            ├── review-design.md
+            ├── review-requirements.md
+            ├── capture-knowledge.md
+            └── debug.md
+```
+
+### For VSCode:
+```
+└── .vscode/
+    └── commands/             # Command templates for AI assistants (Markdown files)
+        ├── new-requirement.md
+        ├── code-review.md
+        ├── execute-plan.md
+        ├── writing-test.md
+        ├── update-planning.md
+        ├── check-implementation.md
+        ├── review-design.md
+        ├── review-requirements.md
+        ├── capture-knowledge.md
+        └── debug.md
+```
+
 ## Customizing Templates
 
 All templates are plain Markdown files with YAML frontmatter. You can customize them to fit your project's needs:
@@ -203,6 +242,46 @@ Available commands:
 - `capture-knowledge` - Analyze and explain code with recursive dependency analysis and Mermaid diagrams
 
 Commands can be referenced in Claude Code chats to guide AI assistance through your development phases.
+
+### GitHub Copilot
+
+Generated files:
+- `GITHUB_COPILOT.md`: Workspace instructions and guidelines for GitHub Copilot
+- `.github/copilot/commands/`: Custom command templates as Markdown files
+
+Available commands:
+- `new-requirement` - Complete workflow for adding a new feature from requirements to PR
+- `code-review` - Structured local code review against design docs before pushing changes
+- `execute-plan` - Walk a feature plan task-by-task with interactive prompts
+- `writing-test` - Write unit/integration tests targeting 100% coverage
+- `update-planning` - Update planning and task breakdown
+- `check-implementation` - Compare implementation with design
+- `review-design` - Review system design and architecture
+- `review-requirements` - Review and summarize requirements
+- `capture-knowledge` - Analyze and explain code with recursive dependency analysis and Mermaid diagrams
+- `debug` - Debug and troubleshoot issues systematically
+
+To use these commands in GitHub Copilot Chat, reference them in your prompts (e.g., "Use the new-requirement command to help me add a feature").
+
+### VSCode
+
+Generated files:
+- `VSCODE_AI.md`: Instructions for AI assistants in VSCode
+- `.vscode/commands/`: Command template files as Markdown
+
+Available commands:
+- `new-requirement` - Complete workflow for adding a new feature from requirements to PR
+- `code-review` - Structured local code review against design docs before pushing changes
+- `execute-plan` - Walk a feature plan task-by-task with interactive prompts
+- `writing-test` - Write unit/integration tests targeting 100% coverage
+- `update-planning` - Update planning and task breakdown
+- `check-implementation` - Compare implementation with design
+- `review-design` - Review system design and architecture
+- `review-requirements` - Review and summarize requirements
+- `capture-knowledge` - Analyze and explain code with recursive dependency analysis
+- `debug` - Debug and troubleshoot issues systematically
+
+Use these command files as prompts to guide your AI assistant (like GitHub Copilot, Cody, or other VSCode AI extensions) through structured workflows.
 
 ## Workflow Examples
 
@@ -431,13 +510,16 @@ MIT
 | Task | Command |
 |------|---------|
 | Initialize everything | `npx ai-devkit init --all` |
-| Initialize for Cursor | `npx ai-devkit init --environment cursor` |
+| Initialize for Cursor | `npx ai-devkit init --environment cursor --all` |
+| Initialize for GitHub Copilot | `npx ai-devkit init --environment copilot --all` |
+| Initialize for VSCode | `npx ai-devkit init --environment vscode --all` |
+| Initialize all environments | `npx ai-devkit init --environment all --all` |
 | Add specific phases | `npx ai-devkit init --phases requirements,design` |
 | Add one phase later | `npx ai-devkit phase testing` |
-| Guided feature workflow | `/new-requirement` (Cursor & Claude) |
-| Execute feature plan | `/execute-plan` (Cursor & Claude) |
-| Generate tests | `/writing-test` (Cursor & Claude) |
-| Local code review | `/code-review` (Cursor & Claude) |
+| Guided feature workflow | `/new-requirement` (Cursor), `new-requirement` (Claude/Copilot/VSCode) |
+| Execute feature plan | `/execute-plan` (Cursor), `execute-plan` (Claude/Copilot/VSCode) |
+| Generate tests | `/writing-test` (Cursor), `writing-test` (Claude/Copilot/VSCode) |
+| Local code review | `/code-review` (Cursor), `code-review` (Claude/Copilot/VSCode) |
 | Help | `npx ai-devkit --help` |
 
 | Quick links | Description |
